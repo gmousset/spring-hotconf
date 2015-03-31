@@ -1,32 +1,32 @@
 /**
  * 
  */
-package me.configurable.annotation;
+package com.github.gm.hotconf.springconf;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
 
+import com.github.gm.hotconf.HotConfigurableProperties;
+
 /**
- * @author gwendalmousset
+ * @author Gwendal Mousset
  *
  */
-public class ConfigurablePropertiesBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
+public class HotConfigurablePropertiesBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
 
 	/* (non-Javadoc)
 	 * @see org.springframework.context.annotation.ImportBeanDefinitionRegistrar#registerBeanDefinitions(org.springframework.core.type.AnnotationMetadata, org.springframework.beans.factory.support.BeanDefinitionRegistry)
 	 */
 	@Override
-	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+	public final void registerBeanDefinitions(final AnnotationMetadata importingClassMetadata, final BeanDefinitionRegistry registry) {
 		GenericBeanDefinition def1 = new GenericBeanDefinition();
-		def1.setBeanClass(ConfigurableProperties.class);
+		def1.setBeanClass(HotConfigurableProperties.class);
 		registry.registerBeanDefinition("configurableProperties", def1);
 		
 		GenericBeanDefinition def2 = new GenericBeanDefinition();
-		def2.setBeanClass(ConfigurablePropertyBeanProcessor.class);
+		def2.setBeanClass(HotConfigurablePropertyBeanProcessor.class);
 		registry.registerBeanDefinition("configurablePropertyBeanProcessor", def2);
 	}
 }

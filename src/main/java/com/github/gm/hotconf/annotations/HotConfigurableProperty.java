@@ -1,7 +1,7 @@
 /**
  * 
  */
-package me.configurable.annotation;
+package com.github.gm.hotconf.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,11 +9,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author gwendalmousset
- *
+ * Mark a class field as configurable.
+ * Works on Spring instantiated beans.
+ * 
+ * @author Gwendal Mousset
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ConfigurableProperty {
+public @interface HotConfigurableProperty {
 
 }

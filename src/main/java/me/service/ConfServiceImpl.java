@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.github.gm.hotconf.HotConfigurableProperties;
+import com.github.gm.hotconf.annotations.HotConfigurableProperty;
+
 import me.bean.Conf;
-import me.configurable.annotation.ConfigurableProperties;
-import me.configurable.annotation.ConfigurableProperty;
 
 /**
  * @author gwendalmousset
@@ -19,17 +20,17 @@ import me.configurable.annotation.ConfigurableProperty;
 public class ConfServiceImpl implements ConfService {
 
 	@Autowired
-	private ConfigurableProperties confProp;
+	private HotConfigurableProperties confProp;
 	
-	@ConfigurableProperty
+	@HotConfigurableProperty
 	@Value("${conf.min}")
 	private int min;
 	
-	@ConfigurableProperty
+	@HotConfigurableProperty
 	@Value("${conf.max}")
 	private int max;
 	
-	@ConfigurableProperty
+	@HotConfigurableProperty
 	@Value("${conf.text}")
 	private String text;
 	
