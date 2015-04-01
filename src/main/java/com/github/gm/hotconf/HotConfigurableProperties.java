@@ -87,6 +87,9 @@ public final class HotConfigurableProperties {
 			ret = "unknown property";
 		} else {
 			try {
+				// call hooks
+				this.confHooks.callHooksBeforePropertyChange(pPropertyName);
+				
 				final boolean accessible = pi.field.isAccessible();
 				if (!accessible) {
 					pi.field.setAccessible(true);
@@ -97,8 +100,9 @@ public final class HotConfigurableProperties {
 				if (!accessible) {
 					pi.field.setAccessible(false);
 				}
+				
 				// call hooks
-				this.confHooks.callHooksForPropertyChange(pPropertyName);
+				this.confHooks.callHooksAfterPropertyChange(pPropertyName);
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				LOGGER.error(e.getMessage());
 				ret = "unexpecting error: " + e.getMessage();

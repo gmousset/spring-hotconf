@@ -25,40 +25,83 @@ public class HotConfigurableHooks {
 	/**
 	 * Hooks by property.
 	 */
-	private Map<String, List<HookInfo>> hooks;
+	private Map<String, List<HookInfo>> hooksBefore;
+	private Map<String, List<HookInfo>> hooksAfter;
 	
 	/**
 	 * Constructor.
 	 */
 	public HotConfigurableHooks() {
 		super();
-		this.hooks = new HashMap<>();
+		this.hooksBefore = new HashMap<>();
+		this.hooksAfter = new HashMap<>();
 	}
 	
 	/**
 	 * Add a hook for property change.
 	 * @param pBean The method owner.
 	 * @param pMethod The called method.
+	 * @param pPriority The hook invocation priority.
 	 * @param pPropertyName The property name.
 	 */
-	public void addHook(final Object pBean, final Method pMethod, final String pPropertyName) {
+	public void addHookBefore(final Object pBean, final Method pMethod, int pPriority, final String pPropertyName) {
+		this.addHook(pBean, pMethod, pPriority, pPropertyName, hooksBefore);
+	}
+	
+	/**
+	 * Add a hook for property change.
+	 * @param pBean The method owner.
+	 * @param pMethod The called method.
+	 * @param pPriority The hook invocation priority.
+	 * @param pPropertyName The property name.
+	 */
+	public void addHookAfter(final Object pBean, final Method pMethod, int pPriority, final String pPropertyName) {
+		this.addHook(pBean, pMethod, pPriority, pPropertyName, hooksAfter);
+	}
+	
+	/**
+	 * Add a hook for property change.
+	 * @param pBean The method owner.
+	 * @param pMethod The called method.
+	 * @param pPriority The hook invocation priority.
+	 * @param pPropertyName The property name.
+	 * @param pMap Before or after hooks map.
+	 */
+	private void addHook(final Object pBean, final Method pMethod, int pPriority, final String pPropertyName, Map<String, List<HookInfo>> pMap) {
 		// create list of it's the first hook for the current property
-		if (this.hooks.get(pPropertyName) == null) {
-			this.hooks.put(pPropertyName, new ArrayList<>());
+		if (pMap.get(pPropertyName) == null) {
+			pMap.put(pPropertyName, new ArrayList<>());
 		}
 		// add hookinfo
-		final List<HookInfo> hookList = this.hooks.get(pPropertyName);
-		hookList.add(new HookInfo(pBean, pMethod));
+		final List<HookInfo> hookList = pMap.get(pPropertyName);
+		hookList.add(new HookInfo(pBean, pMethod, pPriority));
 		LOGGER.info("Add hook " + pBean.getClass().getName() + "." + pMethod.getName());
+	}
+	
+	/**
+	 * Call hooks for property before change.
+	 * @param pPropertyName The property name.
+	 */
+	public void callHooksBeforePropertyChange(final String pPropertyName) {
+		final List<HookInfo> hookList = this.hooksBefore.get(pPropertyName);
+		this.callHooksForPropertyChange(hookList);
+	}
+	
+	/**
+	 * Call hooks for property after change.
+	 * @param pPropertyName The property name.
+	 */
+	public void callHooksAfterPropertyChange(final String pPropertyName) {
+		final List<HookInfo> hookList = this.hooksAfter.get(pPropertyName);
+		this.callHooksForPropertyChange(hookList);
 	}
 	
 	/**
 	 * Call hooks for property.
 	 * @param pPropertyName The property name.
 	 */
-	public void callHooksForPropertyChange(final String pPropertyName) {
-		final List<HookInfo> hookList = this.hooks.get(pPropertyName);
-		for (HookInfo hook : hookList) {
+	private void callHooksForPropertyChange(final List<HookInfo> pHookList) {
+		for (HookInfo hook : pHookList) {
 			try {
 				final boolean accessible = hook.method.isAccessible();
 				if (!accessible) {
@@ -81,18 +124,23 @@ public class HotConfigurableHooks {
 		/** Owner bean. */
 		private Object bean;
 		
-		/** Called method */
+		/** Called method. */
 		private Method method;
+		
+		/** Hook priority. */
+		private int priority;
 
 		/**
 		 * Constructor.
-		 * @param bean The bean owner.
-		 * @param method The method.
+		 * @param pBean The bean owner.
+		 * @param pMethod The method.
+		 * @param pPriority The hook invocation priority.
 		 */
-		public HookInfo(Object bean, Method method) {
+		public HookInfo(Object pBean, Method pMethod, int pPriority) {
 			super();
-			this.bean = bean;
-			this.method = method;
+			this.bean = pBean;
+			this.method = pMethod;
+			this.priority = pPriority;
 		}
 	}
 }

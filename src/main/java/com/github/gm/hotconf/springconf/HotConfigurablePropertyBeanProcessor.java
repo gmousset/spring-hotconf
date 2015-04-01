@@ -20,7 +20,8 @@ import org.springframework.util.StringUtils;
 import com.github.gm.hotconf.HotConfigurableHooks;
 import com.github.gm.hotconf.HotConfigurableProperties;
 import com.github.gm.hotconf.annotations.HotConfigurableProperty;
-import com.github.gm.hotconf.annotations.HotConfigurationHook;
+import com.github.gm.hotconf.annotations.HotConfigurationHookAfter;
+import com.github.gm.hotconf.annotations.HotConfigurationHookBefore;
 
 /**
  * @author Gwendal Mousset
@@ -62,10 +63,14 @@ public final class HotConfigurablePropertyBeanProcessor implements BeanPostProce
 		ReflectionUtils.doWithMethods(pBean.getClass(), new MethodCallback() {
 			@Override
 			public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
-				// look for @HotConfigurationHook annotation
-				final HotConfigurationHook annotation = method.getAnnotation(HotConfigurationHook.class);
-				if (annotation != null) {
-					confHooks.addHook(pBean, method, annotation.value());
+				// look for @HotConfigurationHookXXX annotation
+				final HotConfigurationHookBefore annotationBefore = method.getAnnotation(HotConfigurationHookBefore.class);
+				if (annotationBefore != null) {
+					confHooks.addHookBefore(pBean, method, annotationBefore.priority(), annotationBefore.value());
+				}
+				final HotConfigurationHookAfter annotationAfter = method.getAnnotation(HotConfigurationHookAfter.class);
+				if (annotationAfter != null) {
+					confHooks.addHookAfter(pBean, method, annotationAfter.priority(), annotationAfter.value());
 				}
 			}
 		});
