@@ -8,6 +8,7 @@ import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
 
+import com.github.gm.hotconf.HotConfigurableHooks;
 import com.github.gm.hotconf.HotConfigurableProperties;
 
 /**
@@ -21,12 +22,16 @@ public class HotConfigurablePropertiesBeanDefinitionRegistrar implements ImportB
 	 */
 	@Override
 	public final void registerBeanDefinitions(final AnnotationMetadata importingClassMetadata, final BeanDefinitionRegistry registry) {
-		GenericBeanDefinition def1 = new GenericBeanDefinition();
-		def1.setBeanClass(HotConfigurableProperties.class);
-		registry.registerBeanDefinition("configurableProperties", def1);
+		GenericBeanDefinition beanDefConfProps = new GenericBeanDefinition();
+		beanDefConfProps.setBeanClass(HotConfigurableProperties.class);
+		registry.registerBeanDefinition("configurableProperties", beanDefConfProps);
 		
-		GenericBeanDefinition def2 = new GenericBeanDefinition();
-		def2.setBeanClass(HotConfigurablePropertyBeanProcessor.class);
-		registry.registerBeanDefinition("configurablePropertyBeanProcessor", def2);
+		GenericBeanDefinition beanDefConfHooks = new GenericBeanDefinition();
+		beanDefConfHooks.setBeanClass(HotConfigurableHooks.class);
+		registry.registerBeanDefinition("configurableHooks", beanDefConfHooks);
+		
+		GenericBeanDefinition beanDefPropBeanProcessor = new GenericBeanDefinition();
+		beanDefPropBeanProcessor.setBeanClass(HotConfigurablePropertyBeanProcessor.class);
+		registry.registerBeanDefinition("configurablePropertyBeanProcessor", beanDefPropBeanProcessor);
 	}
 }
