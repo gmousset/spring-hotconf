@@ -19,7 +19,7 @@ public enum AcceptedFieldTypes {
 	LONG_PRIMITIVE(long.class, new LongConverter()),
 	DOUBLE(Double.class, new DoubleConverter()),
 	DOUBLE_PRIMITIVE(double.class, new DoubleConverter()),
-	FLOAT(Double.class, new FloatConverter()),
+	FLOAT(Float.class, new FloatConverter()),
 	FLOAT_PRIMITIVE(float.class, new FloatConverter())
 	;
 	

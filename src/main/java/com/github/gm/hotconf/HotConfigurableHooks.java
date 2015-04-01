@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,18 +102,25 @@ public class HotConfigurableHooks {
 	 * @param pPropertyName The property name.
 	 */
 	private void callHooksForPropertyChange(final List<HookInfo> pHookList) {
-		for (HookInfo hook : pHookList) {
-			try {
-				final boolean accessible = hook.method.isAccessible();
-				if (!accessible) {
-					hook.method.setAccessible(true);
+		if (pHookList != null && pHookList.size() > 0) {
+			// sort hooks by priority
+			final List<HookInfo> sortedHooks = pHookList.stream()
+					.sorted((h1, h2) -> Integer.compare(h2.priority, h1.priority))
+					.collect(Collectors.toList());
+
+			for (HookInfo hook : sortedHooks) {
+				try {
+					final boolean accessible = hook.method.isAccessible();
+					if (!accessible) {
+						hook.method.setAccessible(true);
+					}
+					hook.method.invoke(hook.bean, (Object[]) null);
+					if (!accessible) {
+						hook.method.setAccessible(false);
+					}
+				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					LOGGER.error("Invokation of hook method " + hook.bean.getClass() + "." + hook.method.getName() + " failed: " + e.getMessage());
 				}
-				hook.method.invoke(hook.bean, (Object[]) null);
-				if (!accessible) {
-					hook.method.setAccessible(false);
-				}
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				LOGGER.error("Invokation of hook method " + hook.bean.getClass() + "." + hook.method.getName() + " failed: " + e.getMessage());
 			}
 		}
 	}

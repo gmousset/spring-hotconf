@@ -7,7 +7,7 @@ package com.github.gm.hotconf.types;
  * @author Gwendal Mousset
  *
  */
-public final class IntegerConverter implements TypeConverter<Integer> {
+public class IntegerConverter implements TypeConverter<Integer> {
 
 	/*
 	 * (non-Javadoc)

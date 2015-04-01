@@ -4,10 +4,9 @@
 	<groupId>com.github.gmousset</groupId>
 	<artifactId>spring-hotconf</artifactId>
 	<packaging>jar</packaging>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>Spring HotConf</name>
 	<url>http://github.com/gmousset/spring-hotconf</url>
-	
 	<build>
 		<finalName>spring-hotconf-${project.version}</finalName>
 		<plugins>
@@ -32,15 +31,20 @@
 			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.springframework</groupId> -->
-<!-- 			<artifactId>spring-context-support</artifactId> -->
-<!-- 			<version>4.1.5.RELEASE</version> -->
-<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.crashub</groupId>
 			<artifactId>crash.embed.spring</artifactId>
 			<version>1.3.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>spring-context</artifactId>
+					<groupId>org.springframework</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>spring-beans</artifactId>
+					<groupId>org.springframework</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.crashub</groupId>
@@ -54,8 +58,36 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>4.1.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>4.1.5.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>4.1.5.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>4.1.5.RELEASE</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>spring-context</artifactId>
+					<groupId>org.springframework</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -64,6 +96,5 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
 </project>
