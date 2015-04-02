@@ -16,8 +16,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HotConfigurationHookAfter {
-	/** Property name. */
-	String value();
-	/** Invocation priority. */
-	int priority() default 0;
+    /** Property name. */
+    String value();
+
+    /** Invocation priority. */
+    int priority() default 0;
 }

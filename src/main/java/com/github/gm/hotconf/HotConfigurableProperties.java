@@ -25,139 +25,153 @@ import com.github.gm.hotconf.types.AcceptedFieldTypes;
  */
 public final class HotConfigurableProperties {
 
-	/** Class logger. */
-	private static final Logger LOGGER = LoggerFactory.getLogger(HotConfigurableProperties.class);
-	
-	@Autowired
-	private HotConfigurableHooks confHooks;
-	
-	/** 
-	 * Property map. 
-	 * The key is the declared property name.
-	 */
-	private Map<String, PropertyInfo> properties;
-	
-	/**
-	 * Default constructor.
-	 */
-	public HotConfigurableProperties() {
-		super();
-		this.properties = new HashMap<>();
-	}
-	
-	/**
-	 * Get property value.
-	 * @param pPropertyName The property name.
-	 * @return The property value.
-	 */
-	public Object getPropertyValue(final String pPropertyName) {
-		final PropertyInfo pi = this.properties.get(pPropertyName);
-		Object ret;
-		if (pi == null) {
-			ret = "unknown property";
-		} else {
-			try {
-				final boolean accessible = pi.field.isAccessible();
-				if (!accessible) {
-					pi.field.setAccessible(true);
-				}
-				ret = pi.field.get(pi.bean);
-				if (!accessible) {
-					pi.field.setAccessible(false);
-				}
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				LOGGER.error(e.getMessage());
-				ret = "unexpecting error: " + e.getMessage();
-			}
-		}
-		
-		return ret;
-	}
-	
-	/**
-	 * Set property value.
-	 * @param pPropertyName The property name.
-	 * @param pNewValue The new property value in string format.
-	 */
-	public Object setPropertyValue(final String pPropertyName, final String pNewValue) {
-		final PropertyInfo pi = this.properties.get(pPropertyName);
-		Object ret;
-		
-		if (pi == null) {
-			ret = "unknown property";
-		} else {
-			try {
-				// call hooks
-				this.confHooks.callHooksBeforePropertyChange(pPropertyName);
-				
-				final boolean accessible = pi.field.isAccessible();
-				if (!accessible) {
-					pi.field.setAccessible(true);
-				}
-				final Object value = AcceptedFieldTypes.converterForClass(pi.field.getType()).convertFrom(pNewValue);
-				pi.field.set(pi.bean, value);
-				ret = pNewValue;
-				if (!accessible) {
-					pi.field.setAccessible(false);
-				}
-				
-				// call hooks
-				this.confHooks.callHooksAfterPropertyChange(pPropertyName);
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				LOGGER.error(e.getMessage());
-				ret = "unexpecting error: " + e.getMessage();
-			}
-		}
-		
-		return ret;
-	}
-	
-	/**
-	 * Add a new configurable property.
-	 * @param pBean The property owner.
-	 * @param pField The field.
-	 * @param pPropertyName The property name.
-	 */ 
-	public void addProperty(final Object pBean, final Field pField, final String pPropertyName) {
-		if (AcceptedFieldTypes.classes().contains(pField.getType())) {
-			final PropertyInfo pi = new PropertyInfo(pBean, pField);
-			this.properties.put(pPropertyName, pi);
-			LOGGER.debug("Add property " + pPropertyName);
-		} else {
-			LOGGER.warn("Unsuported field type for property " + pPropertyName + "(" + pField.getType().getName() + ")");
-		}
-	}
-	
-	/**
-	 * Get all configurable property list.
-	 * @return A set of property names.
-	 */
-	public Set<String> getAllProperties() {
-		return this.properties.keySet(); 
-	}
-	
-	/**
-	 * Property representation. 
-	 * Info :
-	 * - Owner
-	 * - Field
-	 */
-	private final class PropertyInfo {
-		/** Owner bean. */
-		private Object bean;
-		
-		/** Field. */
-		private Field field;
-		
-		/**
-		 * Constructor.
-		 * @param pBean The owner bean.
-		 * @param pField The field.
-		 */
-		public PropertyInfo(final Object pBean, final Field pField) {
-			this.bean = pBean;
-			this.field = pField;
-		}
-	}
-}
+    /** Class logger. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(HotConfigurableProperties.class);
 
+    /**
+     * Configurable hooks.
+     */
+    @Autowired
+    private HotConfigurableHooks confHooks;
+
+    /**
+     * Property map. The key is the declared property name.
+     */
+    private Map<String, PropertyInfo> properties;
+
+    /**
+     * Default constructor.
+     */
+    public HotConfigurableProperties() {
+        super();
+        this.properties = new HashMap<>();
+    }
+
+    /**
+     * Get property value.
+     * 
+     * @param pPropertyName
+     *            The property name.
+     * @return The property value.
+     */
+    public Object getPropertyValue(final String pPropertyName) {
+        final PropertyInfo pi = this.properties.get(pPropertyName);
+        Object ret;
+        if (pi == null) {
+            ret = "unknown property";
+        } else {
+            try {
+                final boolean accessible = pi.field.isAccessible();
+                if (!accessible) {
+                    pi.field.setAccessible(true);
+                }
+                ret = pi.field.get(pi.bean);
+                if (!accessible) {
+                    pi.field.setAccessible(false);
+                }
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                LOGGER.error(e.getMessage());
+                ret = "unexpecting error: " + e.getMessage();
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+     * Set property value.
+     * 
+     * @param pPropertyName
+     *            The property name.
+     * @param pNewValue
+     *            The new property value in string format.
+     */
+    public Object setPropertyValue(final String pPropertyName, final String pNewValue) {
+        final PropertyInfo pi = this.properties.get(pPropertyName);
+        Object ret;
+
+        if (pi == null) {
+            ret = "unknown property";
+        } else {
+            try {
+                // call hooks
+                this.confHooks.callHooksBeforePropertyChange(pPropertyName);
+
+                final boolean accessible = pi.field.isAccessible();
+                if (!accessible) {
+                    pi.field.setAccessible(true);
+                }
+                final Object value = AcceptedFieldTypes.converterForClass(pi.field.getType()).convertFrom(pNewValue);
+                pi.field.set(pi.bean, value);
+                ret = pNewValue;
+                if (!accessible) {
+                    pi.field.setAccessible(false);
+                }
+
+                // call hooks
+                this.confHooks.callHooksAfterPropertyChange(pPropertyName);
+            } catch (NumberFormatException e) {
+                LOGGER.debug(e.getMessage());
+                ret = "not a number: " + e.getMessage();
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                LOGGER.error(e.getMessage());
+                ret = "unexpecting error: " + e.getMessage();
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+     * Add a new configurable property.
+     * 
+     * @param pBean
+     *            The property owner.
+     * @param pField
+     *            The field.
+     * @param pPropertyName
+     *            The property name.
+     */
+    public void addProperty(final Object pBean, final Field pField, final String pPropertyName) {
+        if (AcceptedFieldTypes.classes().contains(pField.getType())) {
+            final PropertyInfo pi = new PropertyInfo(pBean, pField);
+            this.properties.put(pPropertyName, pi);
+            LOGGER.debug("Add property " + pPropertyName);
+        } else {
+            LOGGER.warn("Unsuported field type for property " + pPropertyName + "(" + pField.getType().getName() + ")");
+        }
+    }
+
+    /**
+     * Get all configurable property list.
+     * 
+     * @return A set of property names.
+     */
+    public Set<String> getAllProperties() {
+        return this.properties.keySet();
+    }
+
+    /**
+     * Property representation. Info : - Owner - Field
+     */
+    private final class PropertyInfo {
+        /** Owner bean. */
+        private Object bean;
+
+        /** Field. */
+        private Field field;
+
+        /**
+         * Constructor.
+         * 
+         * @param pBean
+         *            The owner bean.
+         * @param pField
+         *            The field.
+         */
+        public PropertyInfo(final Object pBean, final Field pField) {
+            this.bean = pBean;
+            this.field = pField;
+        }
+    }
+}

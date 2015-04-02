@@ -17,21 +17,27 @@ import com.github.gm.hotconf.HotConfigurableProperties;
  */
 public class HotConfigurablePropertiesBeanDefinitionRegistrar implements ImportBeanDefinitionRegistrar {
 
-	/* (non-Javadoc)
-	 * @see org.springframework.context.annotation.ImportBeanDefinitionRegistrar#registerBeanDefinitions(org.springframework.core.type.AnnotationMetadata, org.springframework.beans.factory.support.BeanDefinitionRegistry)
-	 */
-	@Override
-	public final void registerBeanDefinitions(final AnnotationMetadata importingClassMetadata, final BeanDefinitionRegistry registry) {
-		GenericBeanDefinition beanDefConfProps = new GenericBeanDefinition();
-		beanDefConfProps.setBeanClass(HotConfigurableProperties.class);
-		registry.registerBeanDefinition("configurableProperties", beanDefConfProps);
-		
-		GenericBeanDefinition beanDefConfHooks = new GenericBeanDefinition();
-		beanDefConfHooks.setBeanClass(HotConfigurableHooks.class);
-		registry.registerBeanDefinition("configurableHooks", beanDefConfHooks);
-		
-		GenericBeanDefinition beanDefPropBeanProcessor = new GenericBeanDefinition();
-		beanDefPropBeanProcessor.setBeanClass(HotConfigurablePropertyBeanProcessor.class);
-		registry.registerBeanDefinition("configurablePropertyBeanProcessor", beanDefPropBeanProcessor);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.springframework.context.annotation.ImportBeanDefinitionRegistrar#
+     * registerBeanDefinitions(org.springframework.core.type.AnnotationMetadata,
+     * org.springframework.beans.factory.support.BeanDefinitionRegistry)
+     */
+    @Override
+    public final void registerBeanDefinitions(final AnnotationMetadata importingClassMetadata, final BeanDefinitionRegistry registry) {
+        
+        final GenericBeanDefinition beanDefConfProps = new GenericBeanDefinition();
+        beanDefConfProps.setBeanClass(HotConfigurableProperties.class);
+        registry.registerBeanDefinition("configurableProperties", beanDefConfProps);
+
+        final GenericBeanDefinition beanDefConfHooks = new GenericBeanDefinition();
+        beanDefConfHooks.setBeanClass(HotConfigurableHooks.class);
+        registry.registerBeanDefinition("configurableHooks", beanDefConfHooks);
+
+        final GenericBeanDefinition beanDefPropBeanProcessor = new GenericBeanDefinition();
+        beanDefPropBeanProcessor.setBeanClass(HotConfigurablePropertyBeanProcessor.class);
+        registry.registerBeanDefinition("configurablePropertyBeanProcessor", beanDefPropBeanProcessor);
+    }
 }

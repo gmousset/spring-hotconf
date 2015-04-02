@@ -13,8 +13,7 @@ import org.springframework.context.annotation.Import;
 import com.github.gm.hotconf.springconf.HotConfigurablePropertiesBeanDefinitionRegistrar;
 
 /**
- * Add this annotation on @Configuration class.
- * Active and setup HotConf.
+ * Add this annotation on @Configuration class. Active and setup HotConf.
  * 
  * @author Gwendal Mousset
  */
@@ -22,5 +21,5 @@ import com.github.gm.hotconf.springconf.HotConfigurablePropertiesBeanDefinitionR
 @Retention(RetentionPolicy.RUNTIME)
 @Import(HotConfigurablePropertiesBeanDefinitionRegistrar.class)
 public @interface EnableHotConfiguration {
-	
+
 }

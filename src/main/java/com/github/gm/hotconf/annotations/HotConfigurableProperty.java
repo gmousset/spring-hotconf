@@ -9,14 +9,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Mark a class field as configurable.
- * Works on Spring instantiated beans.
+ * Mark a class field as configurable. Works on Spring instantiated beans.
  * 
  * @author Gwendal Mousset
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HotConfigurableProperty {
-	/** property name. */
-	String value() default "";
+    /** property name. */
+    String value() default "";
 }

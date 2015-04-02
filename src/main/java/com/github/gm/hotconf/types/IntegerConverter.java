@@ -7,14 +7,16 @@ package com.github.gm.hotconf.types;
  * @author Gwendal Mousset
  *
  */
-public class IntegerConverter implements TypeConverter<Integer> {
+public final class IntegerConverter implements TypeConverter<Integer> {
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.github.gm.hotconf.types.TypeConverter#convertFrom(java.lang.String)
-	 */
-	@Override
-	public Integer convertFrom(final String pStr) {
-		return Integer.valueOf(pStr);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.github.gm.hotconf.types.TypeConverter#convertFrom(java.lang.String)
+     */
+    @Override
+    public Integer convertFrom(final String pStr) {
+        return Integer.valueOf(pStr);
+    }
 }

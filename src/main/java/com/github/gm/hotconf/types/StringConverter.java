@@ -9,14 +9,16 @@ import org.springframework.util.StringUtils;
  * @author Gwendal Mousset
  *
  */
-public class StringConverter implements TypeConverter<String> {
+public final class StringConverter implements TypeConverter<String> {
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.github.gm.hotconf.types.TypeConverter#convertFrom(java.lang.String)
-	 */
-	@Override
-	public String convertFrom(String pStr) {
-		return StringUtils.trimWhitespace(pStr);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * com.github.gm.hotconf.types.TypeConverter#convertFrom(java.lang.String)
+     */
+    @Override
+    public String convertFrom(final String pStr) {
+        return StringUtils.trimWhitespace(pStr);
+    }
 }

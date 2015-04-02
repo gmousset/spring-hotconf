@@ -8,10 +8,12 @@ package com.github.gm.hotconf.types;
  *
  */
 public interface TypeConverter<T> {
-	/**
-	 * Convert String to parameterized type.
-	 * @param str The string value.
-	 * @return The T value.
-	 */
-	T convertFrom(String str);
+    /**
+     * Convert String to parameterized type.
+     * 
+     * @param str
+     *            The string value.
+     * @return The T value.
+     */
+    T convertFrom(String str);
 }
