@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  * @author Gwendal Mousset
  *
  */
-public class HotConfigurableHooks {
+public final class HotConfigurableHooks {
 
     /** Class logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(HotConfigurableHooks.class);
@@ -120,8 +120,8 @@ public class HotConfigurableHooks {
     /**
      * Call hooks for property.
      * 
-     * @param pPropertyName
-     *            The property name.
+     * @param pHookList
+     *            The hooks called.
      */
     private void callHooksForPropertyChange(final List<HookInfo> pHookList) {
         if (pHookList != null && pHookList.size() > 0) {
@@ -168,7 +168,7 @@ public class HotConfigurableHooks {
          * @param pPriority
          *            The hook invocation priority.
          */
-        public HookInfo(Object pBean, Method pMethod, int pPriority) {
+        public HookInfo(final Object pBean, final Method pMethod, final int pPriority) {
             super();
             this.bean = pBean;
             this.method = pMethod;

@@ -5,6 +5,9 @@ package com.github.gm.hotconf;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
@@ -16,17 +19,19 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.util.ReflectionUtils;
 
 import com.github.gm.hotconf.web.config.AppConfig;
 import com.github.gm.hotconf.web.config.WebMvcConfig;
 import com.github.gm.hotconf.web.service.TestingService;
+import com.github.gm.hotconf.web.service.TestingService2;
 
 /**
  * @author Gwendal Mousset
  *
  */
 @WebAppConfiguration
-@ContextHierarchy({ @ContextConfiguration(classes = AppConfig.class), @ContextConfiguration(classes = WebMvcConfig.class), })
+@ContextHierarchy({ @ContextConfiguration(classes = AppConfig.class), @ContextConfiguration(classes = WebMvcConfig.class)})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class HotConfigurationTest {
 
@@ -52,10 +57,15 @@ public class HotConfigurationTest {
 
   @Autowired
   private TestingService testingService;
+  
+  @Autowired
+  private TestingService2 testingService2;
 
   @Autowired
   private HotConfigurableProperties hotConfProps;
 
+  public ArrayList<String> unsupportedType;
+  
   @Test
   public void testPropertiesLoaded() {
 
@@ -64,7 +74,7 @@ public class HotConfigurationTest {
     LOGGER.info("found props: " + allProps);
 
     // count
-    assertEquals(9, allProps.size());
+    assertEquals(10, allProps.size()); // 9 in service1 + 1 in service 2
 
     // names
     assertTrue(allProps.contains(INT_MIN));
@@ -101,6 +111,10 @@ public class HotConfigurationTest {
     assertEquals(0.0f, floatPrm);
     assertEquals(null, floatObj);
     assertEquals(null, string);
+    
+    // get unknown property
+    Object fake1 = this.hotConfProps.getPropertyValue("COUCOUFAKE");
+    assertTrue(((String) fake1).startsWith(Errors.UNKNOWN_PROPERTY.getMessage()));
   }
 
   @Test
@@ -184,5 +198,40 @@ public class HotConfigurationTest {
     this.hotConfProps.setPropertyValue(DOUBLE_OBJ, "500.00001rrrrrrrr");
     Double doubleo2 = (Double) this.hotConfProps.getPropertyValue(DOUBLE_OBJ);
     assertEquals(500.00001, doubleo2.doubleValue(), 0.0);
+    
+    // String
+    this.hotConfProps.setPropertyValue(TESTING_SERVICE_IMPL_STRING_PROP, "hop");
+    String str = (String) this.hotConfProps.getPropertyValue(TESTING_SERVICE_IMPL_STRING_PROP);
+    assertEquals("hop", str);
+    
+    // unknown property
+    Object errorRet = this.hotConfProps.setPropertyValue("POUETPOUET", "hop");
+    assertTrue(((String) errorRet).startsWith(Errors.UNKNOWN_PROPERTY.getMessage()));
+    
+    // not a number
+    Object errorRet2 = this.hotConfProps.setPropertyValue(FLOAT_OBJ, "hop");
+    assertTrue(((String) errorRet2).startsWith(Errors.NOT_A_NUMBER.getMessage()));
+    
+    
+    // add unsupported type
+    Field uf = ReflectionUtils.findField(HotConfigurationTest.class, "unsupportedType");
+    this.hotConfProps.addProperty(this, uf, "niiiii");
+    // normally nothing append...
+  }
+  
+  @Test
+  public void testHooks() {
+    // change int.min value and check hooks execution order
+    this.hotConfProps.setPropertyValue(INT_MIN, "10");
+    // get order list
+    List<String> order = this.testingService.getHooksProof();
+    assertEquals("4", order.get(0));
+    assertEquals("3", order.get(1));
+    assertEquals("2", order.get(2));
+    assertEquals("1", order.get(3));
+    assertEquals("8", order.get(4));
+    assertEquals("4", order.get(5));
+    assertEquals("2", order.get(6));
+    assertEquals("1", order.get(7));
   }
 }

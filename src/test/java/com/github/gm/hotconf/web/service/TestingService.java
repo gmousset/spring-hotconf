@@ -1,5 +1,7 @@
 package com.github.gm.hotconf.web.service;
 
+import java.util.List;
+
 public interface TestingService {
 
 	public abstract int getIntPrimProp();
@@ -37,5 +39,7 @@ public interface TestingService {
 	public abstract String getStringProp();
 
 	public abstract void setStringProp(String stringProp);
+	
+	public abstract List<String> getHooksProof();
 
 }

@@ -3,10 +3,15 @@
  */
 package com.github.gm.hotconf.web.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.github.gm.hotconf.annotations.HotConfigurableProperty;
+import com.github.gm.hotconf.annotations.HotConfigurationHookAfter;
+import com.github.gm.hotconf.annotations.HotConfigurationHookBefore;
 
 /**
  * @author Gwendal Mousset
@@ -44,6 +49,52 @@ public class TestingServiceImpl implements TestingService {
 	@HotConfigurableProperty
 	private String stringProp;
 
+	private List<String> hooksProof = new ArrayList<>();
+	
+	public List<String> getHooksProof() {
+    return hooksProof;
+  }
+
+  @HotConfigurationHookBefore(value = "int.min", priority = 3)
+	public void hookBeforeForIntMinPrio3() {
+	  this.hooksProof.add("3");
+	}
+	
+	@HotConfigurationHookBefore(value = "int.min", priority = 2)
+  public void hookBeforeForIntMinPrio2() {
+	  this.hooksProof.add("2");
+  }
+	
+	@HotConfigurationHookBefore(value = "int.min", priority = 1)
+  public void hookBeforeForIntMinPrio1() {
+	  this.hooksProof.add("1");
+  }
+	
+	@HotConfigurationHookBefore(value = "int.min", priority = 4)
+  public void hookBeforeForIntMinPrio4() {
+	  this.hooksProof.add("4");
+  }
+	
+	@HotConfigurationHookAfter(value = "int.min", priority = 2)
+  public void hookAfterForIntMinPrio2() {
+    this.hooksProof.add("2");
+  }
+  
+	@HotConfigurationHookAfter(value = "int.min", priority = 8)
+  public void hookAfterForIntMinPrio8() {
+    this.hooksProof.add("8");
+  }
+  
+	@HotConfigurationHookAfter(value = "int.min", priority = 1)
+  public void hookAfterForIntMinPrio1() {
+    this.hooksProof.add("1");
+  }
+  
+	@HotConfigurationHookAfter(value = "int.min", priority = 4)
+  public void hookAfterForIntMinPrio4() {
+    this.hooksProof.add("4");
+  }
+	
 	/* (non-Javadoc)
 	 * @see com.github.gm.hotconf.web.service.ITestingService#getIntPrimProp()
 	 */

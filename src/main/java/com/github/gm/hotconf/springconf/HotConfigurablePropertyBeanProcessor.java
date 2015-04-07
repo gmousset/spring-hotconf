@@ -56,7 +56,7 @@ public final class HotConfigurablePropertyBeanProcessor implements BeanPostProce
     }
 
     /**
-     * Process annotations on methods
+     * Process annotations on methods.
      * 
      * @param pBean
      *            The bean field owner.
@@ -68,7 +68,7 @@ public final class HotConfigurablePropertyBeanProcessor implements BeanPostProce
     private void processMethods(final Object pBean, final String pBeanName) throws BeansException {
         ReflectionUtils.doWithMethods(pBean.getClass(), new MethodCallback() {
             @Override
-            public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
+            public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {
                 // look for @HotConfigurationHookXXX annotation
                 final HotConfigurationHookBefore annotationBefore = method.getAnnotation(HotConfigurationHookBefore.class);
                 if (annotationBefore != null) {
@@ -83,7 +83,7 @@ public final class HotConfigurablePropertyBeanProcessor implements BeanPostProce
     }
 
     /**
-     * Process annotations on fields
+     * Process annotations on fields.
      * 
      * @param pBean
      *            The bean field owner.

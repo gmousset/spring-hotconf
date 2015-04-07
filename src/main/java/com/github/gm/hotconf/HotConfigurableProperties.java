@@ -25,6 +25,8 @@ import com.github.gm.hotconf.types.AcceptedFieldTypes;
  */
 public final class HotConfigurableProperties {
 
+    
+
     /** Class logger. */
     private static final Logger LOGGER = LoggerFactory.getLogger(HotConfigurableProperties.class);
 
@@ -58,7 +60,7 @@ public final class HotConfigurableProperties {
         final PropertyInfo pi = this.properties.get(pPropertyName);
         Object ret;
         if (pi == null) {
-            ret = "unknown property";
+            ret = Errors.UNKNOWN_PROPERTY.getMessage() + pPropertyName;
         } else {
             try {
                 final boolean accessible = pi.field.isAccessible();
@@ -71,7 +73,7 @@ public final class HotConfigurableProperties {
                 }
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 LOGGER.error(e.getMessage());
-                ret = "unexpecting error: " + e.getMessage();
+                ret = Errors.UNEXPECTED_ERROR.getMessage() + e.getMessage();
             }
         }
 
@@ -85,13 +87,14 @@ public final class HotConfigurableProperties {
      *            The property name.
      * @param pNewValue
      *            The new property value in string format.
+     * @return The new property value.
      */
     public Object setPropertyValue(final String pPropertyName, final String pNewValue) {
         final PropertyInfo pi = this.properties.get(pPropertyName);
         Object ret;
 
         if (pi == null) {
-            ret = "unknown property";
+            ret = Errors.UNKNOWN_PROPERTY.getMessage() + pPropertyName;
         } else {
             try {
                 // call hooks
@@ -112,10 +115,10 @@ public final class HotConfigurableProperties {
                 this.confHooks.callHooksAfterPropertyChange(pPropertyName);
             } catch (NumberFormatException e) {
                 LOGGER.debug(e.getMessage());
-                ret = "not a number: " + e.getMessage();
+                ret = Errors.NOT_A_NUMBER.getMessage() + e.getMessage();
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 LOGGER.error(e.getMessage());
-                ret = "unexpecting error: " + e.getMessage();
+                ret = Errors.UNEXPECTED_ERROR.getMessage() + e.getMessage();
             }
         }
 
