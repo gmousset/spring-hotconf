@@ -58,6 +58,9 @@
 						</reports>
 					</reportSet>
 				</reportSets>
+				<configuration>
+				    <configLocation>src/test/resources/checkstyle_config.xml</configLocation>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -5,4 +5,4 @@
  * @author Gwendal Mousset
  *
  */
-package com.github.gm.hotconf.web.service;
+package com.github.gm.hotconf.test.web.config;

@@ -51,7 +51,7 @@ public final class HotConfigurablePropertyBeanProcessor implements BeanPostProce
         // looking for @HotConfigurableProperty
         this.processFields(pBean, pBeanName);
         // looking for @HotConfigurationHook
-        this.processMethods(pBean, pBeanName);
+        this.processMethods(pBean);
         return pBean;
     }
 
@@ -60,12 +60,11 @@ public final class HotConfigurablePropertyBeanProcessor implements BeanPostProce
      * 
      * @param pBean
      *            The bean field owner.
-     * @param pBeanName
-     *            The bean name in Spring context.
+     *            
      * @throws BeansException
      *             If an error occurs.
      */
-    private void processMethods(final Object pBean, final String pBeanName) throws BeansException {
+    private void processMethods(final Object pBean) throws BeansException {
         ReflectionUtils.doWithMethods(pBean.getClass(), new MethodCallback() {
             @Override
             public void doWith(final Method method) throws IllegalArgumentException, IllegalAccessException {

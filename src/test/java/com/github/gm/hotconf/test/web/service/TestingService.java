@@ -1,4 +1,4 @@
-package com.github.gm.hotconf.web.service;
+package com.github.gm.hotconf.test.web.service;
 
 import java.util.List;
 

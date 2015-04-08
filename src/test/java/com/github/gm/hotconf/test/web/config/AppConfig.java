@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.gm.hotconf.web.config;
+package com.github.gm.hotconf.test.web.config;
 
 import java.util.Properties;
 
@@ -19,7 +19,7 @@ import com.github.gm.hotconf.annotations.EnableHotConfiguration;
  *
  */
 @Configuration
-@ComponentScan(basePackages = "com.github.gm.hotconf.web.service")
+@ComponentScan(basePackages = "com.github.gm.hotconf.test.web.service")
 @PropertySource({"classpath:config.properties"})
 @EnableHotConfiguration
 public class AppConfig {
