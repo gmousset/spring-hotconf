@@ -79,6 +79,12 @@ Example:
 		 */
 	}
 
+##### Concurrency #####
+
+__Configurable properties are not thread-safe if the property types are not.__
+Consider the use of thread-safe types like __AtomicInteger__ for integer or __AtomicBoolean__ for boolean.
+See [Atomic package](http://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/package-summary.html).
+
 #### Hooks ####
 
 ##### Before/After hooks #####
